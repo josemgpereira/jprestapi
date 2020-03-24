@@ -4,6 +4,7 @@ import com.jp.api.models.Employee;
 import com.jp.api.dto.EmployeeDto;
 import com.jp.api.services.EmployeeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -21,8 +22,8 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @GetMapping
-    public ResponseEntity<List<EmployeeDto>> findAll() {
-        return ResponseEntity.ok(employeeService.findAll());
+    public ResponseEntity<List<EmployeeDto>> findAll(@RequestParam(value = "page", defaultValue = "0") Integer page, @RequestParam(value = "size", defaultValue = "10") Integer size) {
+        return ResponseEntity.ok(employeeService.findAll(PageRequest.of(page, size)));
     }
 
     @GetMapping("/{id}")
@@ -67,8 +68,8 @@ public class EmployeeController {
     }
 
     @GetMapping("/name/{name}")
-    public ResponseEntity<List<EmployeeDto>> findByName(@PathVariable String name) {
-        List<EmployeeDto> employees = employeeService.findByName(name);
+    public ResponseEntity<List<EmployeeDto>> findByName(@PathVariable String name, @RequestParam(value = "page", defaultValue = "0") Integer page, @RequestParam(value = "size", defaultValue = "10") Integer size) {
+        List<EmployeeDto> employees = employeeService.findByName(name, PageRequest.of(page, size));
         if (employees.isEmpty()) {
             return ResponseEntity.noContent().build();
         }

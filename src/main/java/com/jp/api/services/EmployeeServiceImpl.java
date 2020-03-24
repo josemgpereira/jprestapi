@@ -4,6 +4,8 @@ import com.jp.api.dto.EmployeeDto;
 import com.jp.api.models.Employee;
 import com.jp.api.repositories.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +17,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
-    public List<EmployeeDto> findAll() {
-        List<Employee> employees = employeeRepository.findAll();
+    public List<EmployeeDto> findAll(Pageable pageable) {
+        Page<Employee> employees = employeeRepository.findAll(pageable);
         List<EmployeeDto> employeesDto = new ArrayList<>();
         for (Employee employee : employees) {
             employeesDto.add(EmployeeDto.create(employee));
@@ -41,8 +43,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeRepository.deleteById(id);
     }
 
-    public List<EmployeeDto> findByName(String name) {
-        List<Employee> employees = employeeRepository.findByName(name);
+    public List<EmployeeDto> findByName(String name, Pageable pageable) {
+        Page<Employee> employees = employeeRepository.findByName(name, pageable);
         List<EmployeeDto> employeesDto = new ArrayList<>();
         for (Employee employee : employees) {
             employeesDto.add(EmployeeDto.create(employee));
